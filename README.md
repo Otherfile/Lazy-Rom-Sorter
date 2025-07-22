@@ -11,4 +11,6 @@ After extracting the files, the easiest way to get into the directory of the scr
 
 Afterwards, just run
 
-<pre> ```python # python main.py ``` </pre>
+```python
+# python main.py
+```
