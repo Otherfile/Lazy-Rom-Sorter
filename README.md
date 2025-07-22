@@ -23,4 +23,4 @@ Afterwards, just run
 
 If you found this tool useful, consider supporting me on Ko-fi:  
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)]((https://ko-fi.com/otherfile))
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/otherfile)
