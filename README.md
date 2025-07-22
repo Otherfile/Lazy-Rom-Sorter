@@ -15,3 +15,10 @@ Afterwards, just run
   
 <pre lang="python"> python main.py </pre>
 
+
+
+
+
+###Support
+If you found this tool useful, consider supporting me on Ko-fi:  
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)]([(https://ko-fi.com/otherfile))
