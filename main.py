@@ -34,8 +34,8 @@ def find_files(directory):
 
 def find_data(filehash, directory, filename):
 
-
-    xml_path = os.path.join(directory, "wiitdb.xml")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    xml_path = os.path.join(script_dir, "wiitdb.xml")
 
     # Parse the XML file
     try:
@@ -83,10 +83,10 @@ def find_data(filehash, directory, filename):
 
 
                 # Make the folder if it doesn't exist
-                if not os.path.exists(folder_name):
-                    os.makedirs(folder_name)
-
-                shutil.move(os.path.join(directory, temp_name), os.path.join(folder_name, "game.iso"))
+                destination_folder = os.path.join(directory, folder_name)
+                if not os.path.exists(destination_folder):
+                    os.makedirs(destination_folder)
+                shutil.move(os.path.join(directory, temp_name), os.path.join(destination_folder, "game.iso"))
 
 
 def main():
