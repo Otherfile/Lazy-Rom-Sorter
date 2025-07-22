@@ -72,8 +72,10 @@ def find_data(filehash, directory, filename):
                 game_name = re.sub(r"\s*\(.*?\)", "", game_name)
                 game_name = re.sub(r"[!/]", "", game_name)
                 game_name = re.sub(r"[:/]", "", game_name)
-                game_name = re.sub(r"&.*?;", "and", game_name)
+                game_name = re.sub(r" &.*?;", "and", game_name)
                 game_name = re.sub(r"\$.*?;", "s", game_name)
+                game_name = re.sub(r"\s{2,}", " ", game_name)
+
                 game_name = game_name.strip()
 
                 folder_name = game_name + " [" + game_id + "]"
