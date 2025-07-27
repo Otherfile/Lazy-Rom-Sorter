@@ -64,7 +64,7 @@ def get_wbfs_data(filepath): # directory, filename):
         title_bytes = f.read(64)
         game_name = title_bytes.split(b'\x00', 1)[0].decode('utf-8', errors='ignore')
         print(f"Game name: {game_name}")
-        print(f"Game ID: {game_id}")
+        print(f"Game ID: {game_id}\n")
     return game_id
 
 def sort_rom(filepath, game_id, option, directory, filename):
