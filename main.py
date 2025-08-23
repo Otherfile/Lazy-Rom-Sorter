@@ -38,11 +38,15 @@ def find_files(directory, file_extension, option):
 
             if option == "1":
                 game_id = get_iso_data(filepath)
-                sort_rom(filepath, game_id, option, directory, filename)
+                sort_rom(filepath, game_id, option, directory, filename, file_extension)
 
             elif option == "2":
+                game_id = get_ciso_data(filepath)
+                sort_rom(filepath, game_id, option, directory, filename, file_extension)
+
+            elif option == "3":
                 game_id = get_wbfs_data(filepath)
-                sort_rom(filepath, game_id, option, directory, filename)
+                sort_rom(filepath, game_id, option, directory, filename, file_extension)
 
 def get_iso_data(filepath):
     with open(filepath, 'rb') as f:
@@ -54,6 +58,17 @@ def get_iso_data(filepath):
         print(f"Game name: {game_name}")
         print(f"Game ID: {game_id}")
         return game_id
+
+def get_ciso_data(filepath):
+    with open(filepath, 'rb') as f:
+        f.seek(0x8000)  # Skip WBFS header to disc header
+        game_id = f.read(6).decode('ascii', errors='ignore')
+        f.seek(0x8000 + 0x20)
+        title_bytes = f.read(64)
+        game_name = title_bytes.split(b'\x00', 1)[0].decode('utf-8', errors='ignore')
+        print(f"Game name: {game_name}")
+        print(f"Game ID: {game_id}\n")
+    return game_id
 
 def get_wbfs_data(filepath): # directory, filename):
     # filepath = os.path.join(directory, filename)
@@ -67,7 +82,7 @@ def get_wbfs_data(filepath): # directory, filename):
         print(f"Game ID: {game_id}\n")
     return game_id
 
-def sort_rom(filepath, game_id, option, directory, filename):
+def sort_rom(filepath, game_id, option, directory, filename, file_extension):
     game_name = game_map.get(game_id)
     if game_name is None:
         print(f"[WARNING] Game ID {game_id} not found in XML. Skipping.")
@@ -83,17 +98,23 @@ def sort_rom(filepath, game_id, option, directory, filename):
 
     folder_name = game_name + " [" + game_id + "]"
 
-    temp_name = "temp.iso"
 
-    if option == "1":
+
+    if option == "1" or  option == "2":
+        if option == "1":
+            temp_name = "temp.iso"
+        elif option == "2":
+            temp_name = "temp.ciso"
+        else: temp_name = "ERROR"
+
         os.rename(os.path.join(directory, filename), os.path.join(directory, temp_name))
 
         # Make the folder if it doesn't exist
         destination_folder = os.path.join(directory, folder_name)
         if not os.path.exists(destination_folder):
             os.makedirs(destination_folder)
-        shutil.move(os.path.join(directory, temp_name), os.path.join(destination_folder, "game.iso"))
-    elif option == "2":
+        shutil.move(os.path.join(directory, temp_name), os.path.join(destination_folder, "game" + file_extension))
+    elif option == "3":
         os.rename(os.path.join(directory, filename), os.path.join(directory, folder_name + ".wbfs"))
 
 
@@ -102,7 +123,8 @@ def main():
     global game_map
     print("Please Choose the rom format.")
     print("1. GameCube (.iso)")
-    print("2. Wii (.wbfs)")
+    print("2. Compressed GameCube (.ciso)")
+    print("3. Wii (.wbfs)")
 
     while True:
         option = input()
@@ -110,6 +132,9 @@ def main():
             file_extension = ".iso"
             break
         elif option == "2":
+            file_extension = ".ciso"
+            break
+        elif option == "3":
             file_extension = ".wbfs"
             break
         else:
@@ -129,4 +154,3 @@ def main():
     find_files(directory, file_extension, option)
 
 main()
-
